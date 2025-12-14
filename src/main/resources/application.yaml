@@ -13,3 +13,9 @@ spring:
 
   flyway:
     default-schema: app
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

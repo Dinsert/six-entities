@@ -1,0 +1,376 @@
+openapi: 3.0.3
+
+info:
+  title: Six Entities API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: User
+    description: Users with coupons
+  - name: Player
+    description: Players with profile
+  - name: Reader
+    description: Readers with books
+
+paths:
+
+  # ========================= USERS =========================
+
+  /users:
+    get:
+      tags: [User]
+      operationId: getAllUsers
+      summary: Get all users with coupons
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDto'
+
+    post:
+      tags: [User]
+      operationId: createUser
+      summary: Create user with coupons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+  /users/{id}:
+    get:
+      tags: [User]
+      operationId: getUserById
+      summary: Get user with coupons by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+    put:
+      tags: [User]
+      operationId: updateUser
+      summary: Update user and coupons
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+    delete:
+      tags: [User]
+      operationId: deleteUser
+      summary: Delete user with coupons
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+  # ========================= PLAYERS =========================
+
+  /players:
+    get:
+      tags: [Player]
+      operationId: getAllPlayers
+      summary: Get all players with profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerDto'
+
+    post:
+      tags: [Player]
+      operationId: createPlayer
+      summary: Create player with profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDto'
+
+  /players/{id}:
+    get:
+      tags: [Player]
+      operationId: getPlayerById
+      summary: Get player with profile by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDto'
+
+    put:
+      tags: [Player]
+      operationId: updatePlayer
+      summary: Update player and profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDto'
+
+    delete:
+      tags: [Player]
+      operationId: deletePlayer
+      summary: Delete player with profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+  # ========================= READERS =========================
+
+  /readers:
+    get:
+      tags: [Reader]
+      operationId: getAllReaders
+      summary: Get all readers with books
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReaderDto'
+
+    post:
+      tags: [Reader]
+      operationId: createReader
+      summary: Create reader with books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReaderDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReaderDto'
+
+  /readers/{id}:
+    get:
+      tags: [Reader]
+      operationId: getReaderById
+      summary: Get reader with books by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReaderDto'
+
+    put:
+      tags: [Reader]
+      operationId: updateReader
+      summary: Update reader and books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReaderDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReaderDto'
+
+    delete:
+      tags: [Reader]
+      operationId: deleteReader
+      summary: Delete reader with books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+components:
+  schemas:
+
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        coupons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CouponDto'
+
+    CouponDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        discount:
+          type: integer
+
+    PlayerDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        profile:
+          $ref: '#/components/schemas/ProfileDto'
+
+    ProfileDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        login:
+          type: string
+        password:
+          type: string
+
+    ReaderDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookDto'
+
+    BookDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        author:
+          type: string
