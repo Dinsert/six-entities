@@ -1,12 +1,14 @@
-CREATE EXTENSION IF NOT EXISTS 'pgcrypto';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE SCHEMA IF NOT EXISTS app;
 
 CREATE TABLE IF NOT EXISTS app.users (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS app.coupons (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     discount INT NOT NULL
 );
 
@@ -19,28 +21,28 @@ CREATE TABLE IF NOT EXISTS app.user_coupons (
 );
 
 CREATE TABLE IF NOT EXISTS app.profiles (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     login TEXT NOT NULL,
     password TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS app.players (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     profile_id UUID NOT NULL,
     FOREIGN KEY (profile_id) REFERENCES app.profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS app.readers (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS app.books (
-    id UUID PRIMARY KEY gen-random-uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     author TEXT NOT NULL,
     reader_id UUID NOT NULL,
-    FOREIGN KEY (reader_id) REFERENCES app.books(id) ON DELETE CASCADE
+    FOREIGN KEY (reader_id) REFERENCES app.readers(id) ON DELETE CASCADE
 );
