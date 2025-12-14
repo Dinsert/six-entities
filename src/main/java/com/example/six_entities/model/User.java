@@ -22,6 +22,7 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_coupons",
+            schema = "app",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id")
     )
