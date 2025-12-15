@@ -36,7 +36,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Transactional(readOnly = true)
     @Override
-    public  PlayerDto getPlayerById(UUID id) {
+    public PlayerDto getPlayerById(UUID id) {
         return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
             log.warn("Player not found: id={}", id);
             return new PlayerNotFoundException();
@@ -45,7 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Transactional
     @Override
-    public  PlayerDto updatePlayer(PlayerDto playerDto) {
+    public PlayerDto updatePlayer(PlayerDto playerDto) {
         Player player = playerRepository.findById(playerDto.getId()).orElseThrow(() -> {
             log.warn("Player not found: id={}", playerDto.getId());
             return new PlayerNotFoundException();
