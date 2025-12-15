@@ -291,7 +291,7 @@ components:
 
     ReaderDto:
       type: object
-      required: [id, firstName, lastName]
+      required: [id, firstName, lastName, books]
       properties:
         id:
           type: string
@@ -302,5 +302,6 @@ components:
           type: string
         books:
           type: array
+          minItems: 1
           items:
             $ref: '#/components/schemas/BookDto'

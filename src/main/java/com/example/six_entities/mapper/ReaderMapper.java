@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring")
+@Mapper(config = CentralMapperConfig.class)
 public interface ReaderMapper {
 
     @Mapping(target = "books", source = "books")
@@ -23,9 +23,7 @@ public interface ReaderMapper {
 
     @AfterMapping
     default void linkBooks(@MappingTarget Reader reader) {
-        if (reader.getBooks() != null) {
-            reader.getBooks().forEach(book -> book.setReader(reader));
-        }
+        reader.getBooks().forEach(book -> book.setReader(reader));
     }
 }
 

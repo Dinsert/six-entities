@@ -6,16 +6,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring")
+@Mapper(config = CentralMapperConfig.class)
 public interface PlayerMapper {
 
     PlayerDto toDto(Player player);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "profile", ignore = true)
     Player toEntity(PlayerDto dto);
 
     @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(PlayerDto dto, @MappingTarget Player player);
+
 }
 

@@ -7,14 +7,11 @@ import java.util.UUID;
 
 public interface ReaderService {
 
-    @Nullable
     ReaderDto createReader(ReaderDto readerDto);
 
     void deleteReader(UUID id);
 
-    @Nullable
     ReaderDto getReaderById(UUID id);
 
-    @Nullable
     ReaderDto updateReader(ReaderDto readerDto);
 }

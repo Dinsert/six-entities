@@ -1,51 +1,55 @@
 package com.example.six_entities.service.impl;
 
+import com.example.six_entities.exception.PlayerNotFoundException;
 import com.example.six_entities.mapper.PlayerMapper;
 import com.example.six_entities.model.Player;
 import com.example.six_entities.model.PlayerDto;
-import com.example.six_entities.model.Profile;
 import com.example.six_entities.repository.PlayerRepository;
-import com.example.six_entities.repository.ProfileRepository;
 import com.example.six_entities.service.PlayerService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@Transactional
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
-    private final ProfileRepository profileRepository;
 
+    @Transactional
     @Override
-    public @Nullable PlayerDto createPlayer(PlayerDto playerDto) {
+    public PlayerDto createPlayer(PlayerDto playerDto) {
         Player player = playerMapper.toEntity(playerDto);
-        Profile profile = new Profile();
-        profile.setLogin(playerDto.getProfile().getLogin());
-        profile.setPassword(playerDto.getProfile().getPassword());
-        player.setProfile(profileRepository.save(profile));
         return playerMapper.toDto(playerRepository.save(player));
     }
 
+    @Transactional
     @Override
     public void deletePlayer(UUID id) {
         playerRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public @Nullable PlayerDto getPlayerById(UUID id) {
-        return playerMapper.toDto(playerRepository.findById(id).orElseThrow());
+    public  PlayerDto getPlayerById(UUID id) {
+        return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
+            log.warn("Player not found: id={}", id);
+            return new PlayerNotFoundException();
+        }));
     }
 
+    @Transactional
     @Override
-    public @Nullable PlayerDto updatePlayer(PlayerDto playerDto) {
-        Player player = playerRepository.findById(playerDto.getId()).orElseThrow();
+    public  PlayerDto updatePlayer(PlayerDto playerDto) {
+        Player player = playerRepository.findById(playerDto.getId()).orElseThrow(() -> {
+            log.warn("Player not found: id={}", playerDto.getId());
+            return new PlayerNotFoundException();
+        });
         playerMapper.updateEntityFromDto(playerDto, player);
         return playerMapper.toDto(player);
     }

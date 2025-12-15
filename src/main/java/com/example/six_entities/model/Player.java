@@ -18,7 +18,7 @@ public class Player {
 
     private String name;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "profile_id")
     private Profile profile;
 }

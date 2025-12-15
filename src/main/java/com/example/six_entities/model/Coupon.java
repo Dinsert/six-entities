@@ -16,6 +16,6 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private int discount;
+    private Integer discount;
 
 }
