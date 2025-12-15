@@ -1,5 +1,4 @@
 openapi: 3.0.3
-
 info:
   title: Six Entities API
   version: 1.0.0
@@ -9,31 +8,12 @@ servers:
 
 tags:
   - name: User
-    description: Users with coupons
   - name: Player
-    description: Players with profile
   - name: Reader
-    description: Readers with books
 
 paths:
 
-  # ========================= USERS =========================
-
   /users:
-    get:
-      tags: [User]
-      operationId: getAllUsers
-      summary: Get all users with coupons
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDto'
-
     post:
       tags: [User]
       operationId: createUser
@@ -56,7 +36,7 @@ paths:
     get:
       tags: [User]
       operationId: getUserById
-      summary: Get user with coupons by ID
+      summary: Get user by id
       parameters:
         - name: id
           in: path
@@ -75,7 +55,7 @@ paths:
     put:
       tags: [User]
       operationId: updateUser
-      summary: Update user and coupons
+      summary: Update user with coupons
       parameters:
         - name: id
           in: path
@@ -100,7 +80,7 @@ paths:
     delete:
       tags: [User]
       operationId: deleteUser
-      summary: Delete user with coupons
+      summary: Delete user
       parameters:
         - name: id
           in: path
@@ -112,23 +92,7 @@ paths:
         '204':
           description: Deleted
 
-  # ========================= PLAYERS =========================
-
   /players:
-    get:
-      tags: [Player]
-      operationId: getAllPlayers
-      summary: Get all players with profile
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PlayerDto'
-
     post:
       tags: [Player]
       operationId: createPlayer
@@ -151,7 +115,7 @@ paths:
     get:
       tags: [Player]
       operationId: getPlayerById
-      summary: Get player with profile by ID
+      summary: Get player by id
       parameters:
         - name: id
           in: path
@@ -170,7 +134,7 @@ paths:
     put:
       tags: [Player]
       operationId: updatePlayer
-      summary: Update player and profile
+      summary: Update player with profile
       parameters:
         - name: id
           in: path
@@ -195,7 +159,7 @@ paths:
     delete:
       tags: [Player]
       operationId: deletePlayer
-      summary: Delete player with profile
+      summary: Delete player
       parameters:
         - name: id
           in: path
@@ -207,23 +171,7 @@ paths:
         '204':
           description: Deleted
 
-  # ========================= READERS =========================
-
   /readers:
-    get:
-      tags: [Reader]
-      operationId: getAllReaders
-      summary: Get all readers with books
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReaderDto'
-
     post:
       tags: [Reader]
       operationId: createReader
@@ -246,7 +194,7 @@ paths:
     get:
       tags: [Reader]
       operationId: getReaderById
-      summary: Get reader with books by ID
+      summary: Get reader by id
       parameters:
         - name: id
           in: path
@@ -265,7 +213,7 @@ paths:
     put:
       tags: [Reader]
       operationId: updateReader
-      summary: Update reader and books
+      summary: Update reader with books
       parameters:
         - name: id
           in: path
@@ -290,7 +238,7 @@ paths:
     delete:
       tags: [Reader]
       operationId: deleteReader
-      summary: Delete reader with books
+      summary: Delete reader
       parameters:
         - name: id
           in: path
@@ -305,6 +253,15 @@ paths:
 components:
   schemas:
 
+    CouponDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        discount:
+          type: integer
+
     UserDto:
       type: object
       properties:
@@ -318,14 +275,16 @@ components:
           items:
             $ref: '#/components/schemas/CouponDto'
 
-    CouponDto:
+    ProfileDto:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        discount:
-          type: integer
+        login:
+          type: string
+        password:
+          type: string
 
     PlayerDto:
       type: object
@@ -338,15 +297,15 @@ components:
         profile:
           $ref: '#/components/schemas/ProfileDto'
 
-    ProfileDto:
+    BookDto:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        login:
+        name:
           type: string
-        password:
+        author:
           type: string
 
     ReaderDto:
@@ -363,14 +322,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BookDto'
-
-    BookDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        author:
-          type: string
