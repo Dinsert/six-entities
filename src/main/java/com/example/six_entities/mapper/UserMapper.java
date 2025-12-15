@@ -18,7 +18,6 @@ public interface UserMapper {
     User toEntity(UserDto dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "coupons", ignore = true)
     void updateEntityFromDto(UserDto dto, @MappingTarget User user);
 
     List<UserDto> toDtoList(List<User> users);

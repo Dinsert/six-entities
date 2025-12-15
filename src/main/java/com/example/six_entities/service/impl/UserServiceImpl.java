@@ -42,8 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(UUID id) {
-        User user = userRepository.findById(id).orElseThrow();
-        userRepository.delete(user);
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -55,9 +54,6 @@ public class UserServiceImpl implements UserService {
     public @Nullable UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId()).orElseThrow();
         userMapper.updateEntityFromDto(userDto, user);
-        List<Coupon> coupons = user.getCoupons();
-        List<CouponDto> couponsDto = userDto.getCoupons();
-        couponsDto.forEach(couponDto -> coupons.forEach(coupon -> coupon.setDiscount(couponDto.getDiscount())));
         return userMapper.toDto(user);
     }
 }

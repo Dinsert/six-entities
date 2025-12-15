@@ -12,6 +12,7 @@ public interface PlayerMapper {
     PlayerDto toDto(Player player);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "profile", ignore = true)
     Player toEntity(PlayerDto dto);
 
     @Mapping(target = "id", ignore = true)

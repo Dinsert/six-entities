@@ -3,7 +3,9 @@ package com.example.six_entities.service.impl;
 import com.example.six_entities.mapper.PlayerMapper;
 import com.example.six_entities.model.Player;
 import com.example.six_entities.model.PlayerDto;
+import com.example.six_entities.model.Profile;
 import com.example.six_entities.repository.PlayerRepository;
+import com.example.six_entities.repository.ProfileRepository;
 import com.example.six_entities.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
@@ -19,10 +21,15 @@ public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
+    private final ProfileRepository profileRepository;
 
     @Override
     public @Nullable PlayerDto createPlayer(PlayerDto playerDto) {
         Player player = playerMapper.toEntity(playerDto);
+        Profile profile = new Profile();
+        profile.setLogin(playerDto.getProfile().getLogin());
+        profile.setPassword(playerDto.getProfile().getPassword());
+        player.setProfile(profileRepository.save(profile));
         return playerMapper.toDto(playerRepository.save(player));
     }
 

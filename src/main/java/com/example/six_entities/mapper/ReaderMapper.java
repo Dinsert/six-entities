@@ -14,7 +14,7 @@ public interface ReaderMapper {
     ReaderDto toDto(Reader reader);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "books", source = "books")
+    @Mapping(target = "books", ignore = true)
     Reader toEntity(ReaderDto dto);
 
     @Mapping(target = "id", ignore = true)
