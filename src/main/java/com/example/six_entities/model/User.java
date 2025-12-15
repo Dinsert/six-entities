@@ -19,7 +19,7 @@ public class User {
 
     private String username;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_coupons",
             schema = "app",

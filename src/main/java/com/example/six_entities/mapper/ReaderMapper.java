@@ -13,8 +13,13 @@ public interface ReaderMapper {
     @Mapping(target = "books", source = "books")
     ReaderDto toDto(Reader reader);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "books", source = "books")
     Reader toEntity(ReaderDto dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "books", source = "books")
+    void updateEntityFromDto(ReaderDto dto, @MappingTarget Reader reader);
 
     @AfterMapping
     default void linkBooks(@MappingTarget Reader reader) {
@@ -23,3 +28,4 @@ public interface ReaderMapper {
         }
     }
 }
+
