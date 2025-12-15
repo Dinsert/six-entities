@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SixEntitiesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SixEntitiesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SixEntitiesApplication.class, args);
+    }
 
 }

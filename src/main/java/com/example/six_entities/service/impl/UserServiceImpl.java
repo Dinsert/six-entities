@@ -1,6 +1,5 @@
 package com.example.six_entities.service.impl;
 
-import com.example.six_entities.exception.ReaderNotFoundException;
 import com.example.six_entities.exception.UserNotFoundException;
 import com.example.six_entities.mapper.UserMapper;
 import com.example.six_entities.model.Coupon;
@@ -12,7 +11,6 @@ import com.example.six_entities.repository.UserRepository;
 import com.example.six_entities.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public  UserDto createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         List<CouponDto> couponsDto = userDto.getCoupons();
         List<Coupon> coupons = new ArrayList<>();
@@ -52,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public  UserDto getUserById(UUID id) {
+    public UserDto getUserById(UUID id) {
         return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> {
             log.warn("User not found: id={}", id);
             return new UserNotFoundException();
@@ -61,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public  UserDto updateUser(UserDto userDto) {
+    public UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId()).orElseThrow(() -> {
             log.warn("User not found: id={}", userDto.getId());
             return new UserNotFoundException();

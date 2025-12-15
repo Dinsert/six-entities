@@ -11,7 +11,6 @@ import com.example.six_entities.repository.ReaderRepository;
 import com.example.six_entities.service.ReaderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Transactional
     @Override
-    public  ReaderDto createReader(ReaderDto readerDto) {
+    public ReaderDto createReader(ReaderDto readerDto) {
         Reader reader = readerRepository.save(readerMapper.toEntity(readerDto));
         List<BookDto> booksDto = readerDto.getBooks();
         List<Book> books = new ArrayList<>();
@@ -53,7 +52,7 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Transactional(readOnly = true)
     @Override
-    public  ReaderDto getReaderById(UUID id) {
+    public ReaderDto getReaderById(UUID id) {
         return readerMapper.toDto(readerRepository.findById(id).orElseThrow(() -> {
             log.warn("Reader not found: id={}", id);
             return new ReaderNotFoundException();
@@ -62,7 +61,7 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Transactional
     @Override
-    public  ReaderDto updateReader(ReaderDto readerDto) {
+    public ReaderDto updateReader(ReaderDto readerDto) {
         Reader reader = readerRepository.findById(readerDto.getId()).orElseThrow(() -> {
             log.warn("Reader not found: id={}", readerDto.getId());
             return new ReaderNotFoundException();

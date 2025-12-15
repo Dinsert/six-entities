@@ -15,7 +15,7 @@ paths:
 
   /users:
     post:
-      tags: [User]
+      tags: [ User ]
       operationId: createUser
       summary: Create user with coupons
       requestBody:
@@ -33,7 +33,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
 
     put:
-      tags: [User]
+      tags: [ User ]
       operationId: updateUser
       summary: Update user with coupons
       requestBody:
@@ -52,7 +52,7 @@ paths:
 
   /users/{id}:
     get:
-      tags: [User]
+      tags: [ User ]
       operationId: getUserById
       summary: Get user by id
       parameters:
@@ -71,7 +71,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
 
     delete:
-      tags: [User]
+      tags: [ User ]
       operationId: deleteUser
       summary: Delete user
       parameters:
@@ -87,7 +87,7 @@ paths:
 
   /players:
     post:
-      tags: [Player]
+      tags: [ Player ]
       operationId: createPlayer
       summary: Create player with profile
       requestBody:
@@ -105,7 +105,7 @@ paths:
                 $ref: '#/components/schemas/PlayerDto'
 
     put:
-      tags: [Player]
+      tags: [ Player ]
       operationId: updatePlayer
       summary: Update player with profile
       requestBody:
@@ -124,7 +124,7 @@ paths:
 
   /players/{id}:
     get:
-      tags: [Player]
+      tags: [ Player ]
       operationId: getPlayerById
       summary: Get player by id
       parameters:
@@ -143,7 +143,7 @@ paths:
                 $ref: '#/components/schemas/PlayerDto'
 
     delete:
-      tags: [Player]
+      tags: [ Player ]
       operationId: deletePlayer
       summary: Delete player
       parameters:
@@ -159,7 +159,7 @@ paths:
 
   /readers:
     post:
-      tags: [Reader]
+      tags: [ Reader ]
       operationId: createReader
       summary: Create reader with books
       requestBody:
@@ -177,7 +177,7 @@ paths:
                 $ref: '#/components/schemas/ReaderDto'
 
     put:
-      tags: [Reader]
+      tags: [ Reader ]
       operationId: updateReader
       summary: Update reader with books
       requestBody:
@@ -196,7 +196,7 @@ paths:
 
   /readers/{id}:
     get:
-      tags: [Reader]
+      tags: [ Reader ]
       operationId: getReaderById
       summary: Get reader by id
       parameters:
@@ -215,7 +215,7 @@ paths:
                 $ref: '#/components/schemas/ReaderDto'
 
     delete:
-      tags: [Reader]
+      tags: [ Reader ]
       operationId: deleteReader
       summary: Delete reader
       parameters:
@@ -243,7 +243,7 @@ components:
 
     UserDto:
       type: object
-      required: [id, username]
+      required: [ id, username ]
       properties:
         id:
           type: string
@@ -268,7 +268,7 @@ components:
 
     PlayerDto:
       type: object
-      required: [id, name]
+      required: [ id, name ]
       properties:
         id:
           type: string
@@ -291,7 +291,7 @@ components:
 
     ReaderDto:
       type: object
-      required: [id, firstName, lastName, books]
+      required: [ id, firstName, lastName, books ]
       properties:
         id:
           type: string
