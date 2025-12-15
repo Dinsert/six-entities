@@ -54,6 +54,13 @@ public class UserServiceImpl implements UserService {
     public @Nullable UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId()).orElseThrow();
         userMapper.updateEntityFromDto(userDto, user);
+        List<Coupon> coupons = user.getCoupons();
+        List<CouponDto> couponsDto = userDto.getCoupons();
+        couponsDto.forEach(couponDto -> coupons.forEach(coupon -> {
+            if (coupon.getId().equals(couponDto.getId())) {
+                coupon.setDiscount(couponDto.getDiscount());
+            }
+        }));
         return userMapper.toDto(user);
     }
 }
