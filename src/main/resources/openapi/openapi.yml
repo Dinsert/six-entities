@@ -239,7 +239,10 @@ components:
           type: string
           format: uuid
         discount:
-          type: integer
+          type: number
+          format: decimal
+      required:
+        - discount
 
     UserDto:
       type: object

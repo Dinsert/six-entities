@@ -1,6 +1,6 @@
 package com.example.six_entities.service.impl;
 
-import com.example.six_entities.exception.PlayerNotFoundException;
+import com.example.six_entities.exception.ObjectNotFoundException;
 import com.example.six_entities.mapper.PlayerMapper;
 import com.example.six_entities.model.Player;
 import com.example.six_entities.model.PlayerDto;
@@ -39,7 +39,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerDto getPlayerById(UUID id) {
         return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
             log.warn("Player not found: id={}", id);
-            return new PlayerNotFoundException();
+            return new ObjectNotFoundException("Player not found");
         }));
     }
 
@@ -48,7 +48,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerDto updatePlayer(PlayerDto playerDto) {
         Player player = playerRepository.findById(playerDto.getId()).orElseThrow(() -> {
             log.warn("Player not found: id={}", playerDto.getId());
-            return new PlayerNotFoundException();
+            return new ObjectNotFoundException("Player not found");
         });
         playerMapper.updateEntityFromDto(playerDto, player);
         return playerMapper.toDto(player);

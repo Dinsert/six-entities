@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -16,6 +17,6 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Integer discount;
+    private BigDecimal discount;
 
 }

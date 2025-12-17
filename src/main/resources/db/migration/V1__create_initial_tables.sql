@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS app.users (
 
 CREATE TABLE IF NOT EXISTS app.coupons (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    discount INT NOT NULL
+    discount NUMERIC(10, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS app.user_coupons (
