@@ -246,13 +246,15 @@ components:
 
     UserDto:
       type: object
-      required: [ id, username ]
+      required: [ id, username, userProfileReq ]
       properties:
         id:
           type: string
           format: uuid
         username:
           type: string
+        userProfileReq:
+          $ref: '#/components/schemas/UserProfileReq'
         coupons:
           type: array
           items:
@@ -308,3 +310,31 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/BookDto'
+
+    UserProfileReq:
+      type: object
+      required:
+        - loyaltyLevel
+        - externalBalance
+      properties:
+        loyaltyLevel:
+          type: string
+        externalBalance:
+          type: number
+          format: double
+
+    UserProfileRes:
+      type: object
+      required:
+        - userId
+        - loyaltyLevel
+        - externalBalance
+      properties:
+        userId:
+          type: string
+          format: uuid
+        loyaltyLevel:
+          type: string
+        externalBalance:
+          type: number
+          format: double

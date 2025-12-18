@@ -1,5 +1,6 @@
 package com.example.six_entities.service.impl;
 
+import com.example.six_entities.client.UserProfileClient;
 import com.example.six_entities.exception.ObjectNotFoundException;
 import com.example.six_entities.mapper.CouponMapper;
 import com.example.six_entities.mapper.UserMapper;
@@ -22,12 +23,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final CouponMapper couponMapper;
+    private final UserProfileClient userProfileClient;
 
     @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        return userMapper.toDto(userRepository.save(user));
+        User user = userRepository.save(userMapper.toEntity(userDto));
+        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileReq());
+        UserDto dto = userMapper.toDto(user);
+        dto.setUserProfileReq(userDto.getUserProfileReq());
+        return dto;
     }
 
     @Transactional

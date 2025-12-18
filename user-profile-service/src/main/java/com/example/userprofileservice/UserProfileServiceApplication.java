@@ -1,13 +1,12 @@
-package com.example.six_entities;
+package com.example.userprofileservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SixEntitiesApplication {
+public class UserProfileServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SixEntitiesApplication.class, args);
+        SpringApplication.run(UserProfileServiceApplication.class, args);
     }
-
 }

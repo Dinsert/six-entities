@@ -1,1 +1,4 @@
 rootProject.name = 'six-entities'
+
+include 'six-entities'
+include 'user-profile-service'

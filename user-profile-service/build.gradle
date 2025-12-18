@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.openapi.generator' version '7.5.0'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.22'
+    runtimeOnly 'org.postgresql:postgresql'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+openApiGenerate {
+    generatorName = "spring"
+
+    inputSpec = layout.projectDirectory
+            .file("src/main/resources/openapi/openapi.yml")
+            .asFile
+            .path
+
+    outputDir = layout.buildDirectory
+            .dir("generated")
+            .get()
+            .asFile
+            .path
+
+    apiPackage = "com.example.userprofile.api"
+    modelPackage = "com.example.userprofile.api.dto"
+
+    configOptions = [
+            interfaceOnly  : "true",
+            useSpringBoot3 : "true",
+            useTags        : "true",
+            openApiNullable: "false"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir layout.buildDirectory
+                    .dir("generated/src/main/java")
+                    .get()
+                    .asFile
+        }
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.openApiGenerate
+}
+
+test {
+    useJUnitPlatform()
+}
