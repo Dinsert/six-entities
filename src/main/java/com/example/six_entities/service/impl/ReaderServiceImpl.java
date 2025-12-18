@@ -41,7 +41,7 @@ public class ReaderServiceImpl implements ReaderService {
     public ReaderDto getReaderById(UUID id) {
         return readerMapper.toDto(readerRepository.findById(id).orElseThrow(() -> {
             log.warn("Reader not found: id={}", id);
-            return new ObjectNotFoundException("Reader not found");
+            return new ObjectNotFoundException("Reader not found: id=" + id);
         }));
     }
 
@@ -50,7 +50,7 @@ public class ReaderServiceImpl implements ReaderService {
     public ReaderDto updateReader(ReaderDto readerDto) {
         Reader reader = readerRepository.findById(readerDto.getId()).orElseThrow(() -> {
             log.warn("Reader not found: id={}", readerDto.getId());
-            return new ObjectNotFoundException("Reader not found");
+            return new ObjectNotFoundException("Reader not found: id=" + readerDto.getId());
         });
         readerMapper.updateEntityFromDto(readerDto, reader);
         readerDto.getBooks()

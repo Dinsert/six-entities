@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(UUID id) {
         return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> {
             log.warn("User not found: id={}", id);
-            return new ObjectNotFoundException("User not found");
+            return new ObjectNotFoundException("User not found: id=" + id);
         }));
     }
 
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId()).orElseThrow(() -> {
             log.warn("User not found: id={}", userDto.getId());
-            return new ObjectNotFoundException("User not found");
+            return new ObjectNotFoundException("User not found: id=" + userDto.getId());
         });
         userMapper.updateEntityFromDto(userDto, user);
         userDto.getCoupons()

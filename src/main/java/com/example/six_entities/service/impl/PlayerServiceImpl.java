@@ -39,7 +39,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerDto getPlayerById(UUID id) {
         return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
             log.warn("Player not found: id={}", id);
-            return new ObjectNotFoundException("Player not found");
+            return new ObjectNotFoundException("Player not found: id=" + id);
         }));
     }
 
@@ -48,7 +48,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerDto updatePlayer(PlayerDto playerDto) {
         Player player = playerRepository.findById(playerDto.getId()).orElseThrow(() -> {
             log.warn("Player not found: id={}", playerDto.getId());
-            return new ObjectNotFoundException("Player not found");
+            return new ObjectNotFoundException("Player not found: id=" + playerDto.getId());
         });
         playerMapper.updateEntityFromDto(playerDto, player);
         return playerMapper.toDto(player);
