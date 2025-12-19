@@ -1,6 +1,5 @@
 package com.example.six_entities.service.impl;
 
-import com.example.six_entities.client.UserProfileClient;
 import com.example.six_entities.exception.ObjectNotFoundException;
 import com.example.six_entities.mapper.CouponMapper;
 import com.example.six_entities.mapper.UserMapper;
@@ -8,6 +7,7 @@ import com.example.six_entities.model.User;
 import com.example.six_entities.model.UserDto;
 import com.example.six_entities.model.UserProfileDto;
 import com.example.six_entities.repository.UserRepository;
+import com.example.six_entities.service.UserProfileService;
 import com.example.six_entities.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final CouponMapper couponMapper;
-    private final UserProfileClient userProfileClient;
+    private final UserProfileService userProfileService;
 
     @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userRepository.save(userMapper.toEntity(userDto));
-        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileDto());
+        userProfileService.upsertProfile(user.getId(), userDto.getUserProfileDto());
         UserDto dto = userMapper.toDto(user);
         userMapper.updateDtoFromProfile(userDto.getUserProfileDto(), dto);
         return dto;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             return new ObjectNotFoundException("User not found: id=" + id);
         });
         UserDto dto = userMapper.toDto(user);
-        UserProfileDto profile = userProfileClient.getProfile(id);
+        UserProfileDto profile = userProfileService.getProfile(id);
         userMapper.updateDtoFromProfile(profile, dto);
         return dto;
     }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         userDto.getCoupons()
                 .forEach(couponDto -> user.getCoupons().stream().filter(coupon -> coupon.getId().equals(couponDto.getId()))
                         .forEach(coupon -> couponMapper.updateEntityFromDto(couponDto, coupon)));
-        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileDto());
+        userProfileService.upsertProfile(user.getId(), userDto.getUserProfileDto());
         return userDto;
     }
 }

@@ -35,12 +35,13 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Transactional
     @Override
     public void upsertUserProfile(UUID userId, UserProfileDto userProfileDto) {
-        UserProfile userProfile = userProfileRepository.findById(userId).orElseGet(() -> {
-            UserProfile entity = userProfileMapper.toEntity(userProfileDto);
-            entity.setUserId(userId);
-            userProfileRepository.save(entity);
-            return entity;
-        });
-        userProfileMapper.updateEntityFromDto(userProfileDto, userProfile);
+        throw new RuntimeException();
+//        UserProfile userProfile = userProfileRepository.findById(userId).orElseGet(() -> {
+//            UserProfile entity = userProfileMapper.toEntity(userProfileDto);
+//            entity.setUserId(userId);
+//            userProfileRepository.save(entity);
+//            return entity;
+//        });
+//        userProfileMapper.updateEntityFromDto(userProfileDto, userProfile);
     }
 }

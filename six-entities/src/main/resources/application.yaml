@@ -17,16 +17,18 @@ spring:
 user-profile-service:
   url: http://localhost:8081
 
-feign:
-  client:
-    config:
+resilience4j:
+  retry:
+    instances:
       user-profile:
-        connect-timeout: 2000
-        read-timeout: 5000
-        retryer:
-          period: 500
-          maxPeriod: 5000
-          maxAttempts: 5
+        max-attempts: 5
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2
+        max-wait-duration: 5s
+        enable-randomized-wait: true
+        randomized-wait-factor: 0.2
+        retry-exceptions:
+          - feign.FeignException
 
 springdoc:
   api-docs:
