@@ -14,6 +14,20 @@ spring:
   flyway:
     default-schema: app
 
+user-profile-service:
+  url: http://localhost:8081
+
+feign:
+  client:
+    config:
+      user-profile:
+        connect-timeout: 2000
+        read-timeout: 5000
+        retryer:
+          period: 500
+          maxPeriod: 5000
+          maxAttempts: 5
+
 springdoc:
   api-docs:
     enabled: true
