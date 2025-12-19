@@ -18,7 +18,7 @@ public class UserProfileService {
 
     @Retry(name = "user-profile")
     public void upsertProfile(UUID userId, UserProfileDto dto) {
-        log.info("Calling user-profile-service for userId={}", userId);
+        log.info("Calling user-profile-service PUT for userId={}", userId);
         userProfileClient.upsertProfile(userId, dto);
     }
 
