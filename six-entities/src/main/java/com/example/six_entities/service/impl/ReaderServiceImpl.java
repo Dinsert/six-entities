@@ -9,6 +9,7 @@ import com.example.six_entities.repository.ReaderRepository;
 import com.example.six_entities.service.ReaderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +37,14 @@ public class ReaderServiceImpl implements ReaderService {
         readerRepository.deleteById(id);
     }
 
+    @Cacheable(
+            value = "readers",
+            key = "#id"
+    )
     @Transactional(readOnly = true)
     @Override
     public ReaderDto getReaderById(UUID id) {
+        log.info("DB call for reader {}", id);
         return readerMapper.toDto(readerRepository.findById(id).orElseThrow(() -> {
             log.warn("Reader not found: id={}", id);
             return new ObjectNotFoundException("Reader not found: id=" + id);

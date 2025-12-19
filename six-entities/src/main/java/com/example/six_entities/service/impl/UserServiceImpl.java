@@ -11,6 +11,7 @@ import com.example.six_entities.service.UserProfileService;
 import com.example.six_entities.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +43,14 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Cacheable(
+            value = "users",
+            key = "#id"
+    )
     @Transactional(readOnly = true)
     @Override
     public UserDto getUserById(UUID id) {
+        log.info("DB call for user {}", id);
         User user = userRepository.findById(id).orElseThrow(() -> {
             log.warn("User not found: id={}", id);
             return new ObjectNotFoundException("User not found: id=" + id);

@@ -6,6 +6,22 @@ spring:
     password: 123456
     url: jdbc:postgresql://localhost:5432/six_entities_db
     driver-class-name: org.postgresql.Driver
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  redis:
+    timeout: 2s
+
+cache:
+  ttl: 1h
+
+logging:
+  level:
+    org.springframework.cache: DEBUG
 
   jpa:
     hibernate:

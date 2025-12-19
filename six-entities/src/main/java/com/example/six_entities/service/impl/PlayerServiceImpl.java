@@ -8,6 +8,7 @@ import com.example.six_entities.repository.PlayerRepository;
 import com.example.six_entities.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +35,14 @@ public class PlayerServiceImpl implements PlayerService {
         playerRepository.deleteById(id);
     }
 
+    @Cacheable(
+            value = "players",
+            key = "#id"
+    )
     @Transactional(readOnly = true)
     @Override
     public PlayerDto getPlayerById(UUID id) {
+        log.info("DB call for player {}", id);
         return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
             log.warn("Player not found: id={}", id);
             return new ObjectNotFoundException("Player not found: id=" + id);
