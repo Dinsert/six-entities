@@ -1,7 +1,6 @@
 package com.example.six_entities.client;
 
-import com.example.six_entities.model.UserProfileReq;
-import com.example.six_entities.model.UserProfileRes;
+import com.example.six_entities.model.UserProfileDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,17 +11,18 @@ import java.util.UUID;
 
 @FeignClient(
         name = "user-profile",
-        url = "http://localhost:8081"
+        url = "http://localhost:8081",
+        path = "/api/user-profiles/"
 )
 public interface UserProfileClient {
 
-    @GetMapping("/api/user-profiles/{userId}")
-    UserProfileRes getProfile(@PathVariable UUID userId);
+    @GetMapping("{userId}")
+    UserProfileDto getProfile(@PathVariable UUID userId);
 
-    @PutMapping("/api/user-profiles/{userId}")
-    UserProfileRes upsertProfile(
+    @PutMapping("{userId}")
+    void upsertProfile(
             @PathVariable UUID userId,
-            @RequestBody UserProfileReq dto
+            @RequestBody UserProfileDto dto
     );
 }
 

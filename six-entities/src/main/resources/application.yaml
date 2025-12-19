@@ -4,7 +4,7 @@ spring:
   datasource:
     username: postgres
     password: 123456
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/six_entities_db
     driver-class-name: org.postgresql.Driver
 
   jpa:

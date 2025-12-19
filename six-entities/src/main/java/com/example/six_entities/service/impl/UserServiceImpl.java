@@ -6,6 +6,7 @@ import com.example.six_entities.mapper.CouponMapper;
 import com.example.six_entities.mapper.UserMapper;
 import com.example.six_entities.model.User;
 import com.example.six_entities.model.UserDto;
+import com.example.six_entities.model.UserProfileDto;
 import com.example.six_entities.repository.UserRepository;
 import com.example.six_entities.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userRepository.save(userMapper.toEntity(userDto));
-        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileReq());
+        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileDto());
         UserDto dto = userMapper.toDto(user);
-        dto.setUserProfileReq(userDto.getUserProfileReq());
+        userMapper.updateDtoFromProfile(userDto.getUserProfileDto(), dto);
         return dto;
     }
 
@@ -44,10 +45,14 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public UserDto getUserById(UUID id) {
-        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> {
+        User user = userRepository.findById(id).orElseThrow(() -> {
             log.warn("User not found: id={}", id);
             return new ObjectNotFoundException("User not found: id=" + id);
-        }));
+        });
+        UserDto dto = userMapper.toDto(user);
+        UserProfileDto profile = userProfileClient.getProfile(id);
+        userMapper.updateDtoFromProfile(profile, dto);
+        return dto;
     }
 
     @Transactional
@@ -61,6 +66,7 @@ public class UserServiceImpl implements UserService {
         userDto.getCoupons()
                 .forEach(couponDto -> user.getCoupons().stream().filter(coupon -> coupon.getId().equals(couponDto.getId()))
                         .forEach(coupon -> couponMapper.updateEntityFromDto(couponDto, coupon)));
-        return userMapper.toDto(user);
+        userProfileClient.upsertProfile(user.getId(), userDto.getUserProfileDto());
+        return userDto;
     }
 }
