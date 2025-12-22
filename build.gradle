@@ -1,25 +1,98 @@
 plugins {
-    id 'org.springframework.boot' version '3.3.5' apply false
-    id 'io.spring.dependency-management' version '1.1.7' apply false
-    id 'org.openapi.generator' version '7.5.0' apply false
+    id 'java'
+    id 'org.springframework.boot' version '3.2.6'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.openapi.generator' version '7.5.0'
 }
 
-allprojects {
-    group = 'com.example'
-    version = '0.0.1-SNAPSHOT'
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
 
-    repositories {
-        mavenCentral()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.3"
+        mavenBom "org.testcontainers:testcontainers-bom:1.20.3"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    implementation "org.mapstruct:mapstruct:1.5.5.Final"
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-flyway-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:redis'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+openApiGenerate {
+    generatorName = "spring"
+
+    inputSpec = layout.projectDirectory
+            .file("src/main/resources/openapi/openapi.yml")
+            .asFile
+            .path
+
+    outputDir = layout.buildDirectory
+            .dir("generated")
+            .get()
+            .asFile
+            .path
+
+    apiPackage = "com.example.six_entities.api"
+    modelPackage = "com.example.six_entities.model"
+
+    configOptions = [
+            interfaceOnly  : "true",
+            useSpringBoot3 : "true",
+            useTags        : "true",
+            openApiNullable: "false"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir layout.buildDirectory
+                    .dir("generated/src/main/java")
+                    .get()
+                    .asFile
         }
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
