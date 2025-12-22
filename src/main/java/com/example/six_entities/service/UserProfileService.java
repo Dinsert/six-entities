@@ -18,9 +18,15 @@ public class UserProfileService {
     private final UserProfileClient userProfileClient;
 
     @Retry(name = "user-profile")
-    public void upsertProfile(UUID userId, UserProfileDto dto) {
+    public void createProfile(UUID userId, UserProfileDto dto) {
+        log.info("Calling user-profile-service POST for userId={}", userId);
+        userProfileClient.createProfile(userId, dto);
+    }
+
+    @Retry(name = "user-profile")
+    public void updateProfile(UUID userId, UserProfileDto dto) {
         log.info("Calling user-profile-service PUT for userId={}", userId);
-        userProfileClient.upsertProfile(userId, dto);
+        userProfileClient.updateProfile(userId, dto);
     }
 
     @Cacheable(value = "user_profiles", key = "#userId")
@@ -29,4 +35,5 @@ public class UserProfileService {
         log.info("Calling user-profile-service GET for userId={}", userId);
         return userProfileClient.getProfile(userId);
     }
+
 }

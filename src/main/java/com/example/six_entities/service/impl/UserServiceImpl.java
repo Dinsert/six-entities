@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userRepository.save(userMapper.toEntity(userDto));
-        userProfileService.upsertProfile(user.getId(), userDto.getUserProfileDto());
+        userProfileService.createProfile(user.getId(), userDto.getUserProfileDto());
         UserDto dto = userMapper.toDto(user);
         userMapper.updateDtoFromProfile(userDto.getUserProfileDto(), dto);
         return dto;
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         userDto.getCoupons()
                 .forEach(couponDto -> user.getCoupons().stream().filter(coupon -> coupon.getId().equals(couponDto.getId()))
                         .forEach(coupon -> couponMapper.updateEntityFromDto(couponDto, coupon)));
-        userProfileService.upsertProfile(user.getId(), userDto.getUserProfileDto());
+        userProfileService.updateProfile(user.getId(), userDto.getUserProfileDto());
         return userDto;
     }
 }
