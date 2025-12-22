@@ -8,6 +8,9 @@ import com.example.six_entities.repository.PlayerRepository;
 import com.example.six_entities.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
 
+    @CachePut(value = "players", key = "#result.id")
     @Transactional
     @Override
     public PlayerDto createPlayer(PlayerDto playerDto) {
@@ -28,21 +32,25 @@ public class PlayerServiceImpl implements PlayerService {
         return playerMapper.toDto(playerRepository.save(player));
     }
 
+    @CacheEvict(value = "players", key = "#id")
     @Transactional
     @Override
     public void deletePlayer(UUID id) {
         playerRepository.deleteById(id);
     }
 
+    @Cacheable(value = "players", key = "#id")
     @Transactional(readOnly = true)
     @Override
     public PlayerDto getPlayerById(UUID id) {
+        log.info("DB call for player {}", id);
         return playerMapper.toDto(playerRepository.findById(id).orElseThrow(() -> {
             log.warn("Player not found: id={}", id);
             return new ObjectNotFoundException("Player not found: id=" + id);
         }));
     }
 
+    @CachePut(value = "players", key = "#playerDto.id")
     @Transactional
     @Override
     public PlayerDto updatePlayer(PlayerDto playerDto) {

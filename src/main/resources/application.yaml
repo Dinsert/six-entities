@@ -6,6 +6,18 @@ spring:
     password: 123456
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  redis:
+    timeout: 2s
+
+cache:
+  ttl: 1h
 
   jpa:
     hibernate:
@@ -13,6 +25,22 @@ spring:
 
   flyway:
     default-schema: app
+
+user-profile-service:
+  url: http://localhost:8081
+
+resilience4j:
+  retry:
+    instances:
+      user-profile:
+        max-attempts: 5
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2
+        max-wait-duration: 5s
+        enable-randomized-wait: true
+        randomized-wait-factor: 0.2
+        retry-exceptions:
+          - feign.FeignException
 
 springdoc:
   api-docs:
