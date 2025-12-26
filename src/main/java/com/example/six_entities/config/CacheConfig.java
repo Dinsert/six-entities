@@ -10,7 +10,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import java.time.Duration;
 
 @Configuration
-public class CacheConfig {
+class CacheConfig {
 
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration(

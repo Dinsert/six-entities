@@ -1,8 +1,7 @@
 package com.example.six_entities.service;
 
+import com.example.six_entities.TestContainersConfiguration;
 import com.example.six_entities.client.UserProfileClient;
-import com.example.six_entities.config.BaseIntegrationTest;
-import com.example.six_entities.config.TestContainersConfiguration;
 import com.example.six_entities.exception.ObjectNotFoundException;
 import com.example.six_entities.model.User;
 import com.example.six_entities.model.UserDto;

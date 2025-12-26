@@ -1,4 +1,4 @@
-package com.example.six_entities.config;
+package com.example.six_entities;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

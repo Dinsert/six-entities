@@ -1,6 +1,5 @@
 package com.example.six_entities.controller;
 
-import com.example.six_entities.config.BaseWebMvcTest;
 import com.example.six_entities.model.ReaderDto;
 import com.example.six_entities.service.ReaderService;
 import com.example.six_entities.util.ReaderFixture;
