@@ -1,23 +1,12 @@
 spring:
   application:
     name: six-entities
+
   datasource:
     username: postgres
     password: 123456
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
-  cache:
-    type: redis
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-  redis:
-    timeout: 2s
-
-cache:
-  ttl: 1h
 
   jpa:
     hibernate:
@@ -25,6 +14,20 @@ cache:
 
   flyway:
     default-schema: app
+
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  redis:
+    timeout: 2s
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      acks: all
 
 user-profile-service:
   url: http://localhost:8081
@@ -47,3 +50,6 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+cache:
+  ttl: 1h
