@@ -1,46 +1,37 @@
 package com.example.six_entities.mapper;
 
-import com.example.six_entities.model.OutboxEvent;
-import com.example.six_entities.model.User;
-import com.example.six_entities.model.UserDto;
-import com.example.six_entities.model.UserProfileCreatedEvent;
+import com.example.six_entities.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
 
 import java.time.Instant;
+import java.util.UUID;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = Instant.class)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {Instant.class, OutboxEventStatus.class, UUID.class})
 public interface OutboxEventMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "aggregateType", constant = "USER")
-    @Mapping(target = "aggregateId", source = "user.id")
-    @Mapping(target = "eventType", constant = "USER_PROFILE_CREATED")
     @Mapping(target = "payload", source = "event", qualifiedByName = "convertObjectToJson")
-    @Mapping(target = "status", constant = "NEW")
+    @Mapping(target = "status", expression = "java(OutboxEventStatus.NEW)")
     @Mapping(target = "createdAt", expression = "java(Instant.now())")
-    @Mapping(target = "processedAt", ignore = true)
-    OutboxEvent toEntity(User user, UserProfileCreatedEvent event);
+    OutboxEvent toEntity(UserProfileEvent event);
 
+    @Mapping(target = "eventId", expression = "java(UUID.randomUUID())")
     @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "loyaltyLevel", source = "userDto.userProfileDto.loyaltyLevel")
-    @Mapping(target = "externalBalance", source = "userDto.userProfileDto.externalBalance")
-    UserProfileCreatedEvent toUserProfileCreatedEvent(User user, UserDto userDto);
+    @Mapping(target = "payload.loyaltyLevel", source = "userDto.userProfileDto.loyaltyLevel")
+    @Mapping(target = "payload.externalBalance", source = "userDto.userProfileDto.externalBalance")
+    UserProfileEvent toUserProfileEvent(User user, UserDto userDto, UserProfileEventType eventType);
 
     @Named("convertObjectToJson")
-    default String convertObjectToJson(UserProfileCreatedEvent event) {
+    default String convertObjectToJson(UserProfileEvent event) {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
         try {
             return objectMapper.writeValueAsString(event);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting UserProfileCreatedEvent to JSON", e);
+            throw new RuntimeException("Error converting UserProfileEvent to JSON", e);
         }
     }
 

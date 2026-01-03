@@ -27,7 +27,10 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      acks: all
+      acks:
+      retries: 2147483647
+      properties:
+        enable.idempotence: true
 
 user-profile-service:
   url: http://localhost:8081

@@ -18,16 +18,11 @@ public class OutboxEvent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String aggregateType;
-    private UUID aggregateId;
-    private String eventType;
-
     @Column(columnDefinition = "jsonb")
     @ColumnTransformer(write = "?::jsonb")
     private String payload;
 
-    private String status;
+    private OutboxEventStatus status;
 
     private Instant createdAt;
-    private Instant processedAt;
 }
