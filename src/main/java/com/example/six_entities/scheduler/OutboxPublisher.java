@@ -15,22 +15,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OutboxPublisher {
 
+    public static final String USER_PROFILE_EVENTS = "user-profile-events";
+
     private final OutboxEventRepository outboxEventRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Transactional
     @Scheduled(fixedDelay = 3000)
     public void publish() {
-        List<OutboxEvent> events =
-                outboxEventRepository.findTop100ByStatusOrderByCreatedAt(OutboxEventStatus.NEW);
+        kafkaTemplate.executeInTransaction(kt -> {
+            List<OutboxEvent> events =
+                    outboxEventRepository.findTop100ByStatusOrderByCreatedAt(OutboxEventStatus.NEW);
 
-        for (OutboxEvent event : events) {
-            kafkaTemplate.send(
-                    "user-profile-events",
-                    event.getPayload()
-            );
+            for (OutboxEvent event : events) {
+                kafkaTemplate.send(
+                        USER_PROFILE_EVENTS,
+                        event.getPayload()
+                );
 
-            event.setStatus(OutboxEventStatus.SENT);
-        }
+                event.setStatus(OutboxEventStatus.SENT);
+            }
+
+            return true;
+        });
     }
 }
