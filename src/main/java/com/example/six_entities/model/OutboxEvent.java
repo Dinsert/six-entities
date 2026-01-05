@@ -22,6 +22,7 @@ public class OutboxEvent {
     @ColumnTransformer(write = "?::jsonb")
     private String payload;
 
+    @Enumerated(EnumType.STRING)
     private OutboxEventStatus status;
 
     private Instant createdAt;

@@ -49,11 +49,7 @@ create TABLE IF NOT EXISTS app.books (
 
 create TABLE IF NOT EXISTS app.outbox_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    aggregate_type VARCHAR(50) NOT NULL,
-    aggregate_id UUID NOT NULL,
-    event_type VARCHAR(50) NOT NULL,
     payload JSONB NOT NULL,
     status VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    processed_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL
 );
