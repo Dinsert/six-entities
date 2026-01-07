@@ -18,6 +18,8 @@ public class OutboxEvent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String messageKey;
+
     @Column(columnDefinition = "jsonb")
     @ColumnTransformer(write = "?::jsonb")
     private String payload;

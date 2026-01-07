@@ -5,6 +5,7 @@ import com.example.six_entities.model.OutboxEventStatus;
 import com.example.six_entities.repository.OutboxEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OutboxPublisher {
 
-    public static final String USER_PROFILE_EVENTS = "user-profile-events";
+    @Value("${topic.name}")
+    private String topic;
 
     private final OutboxEventRepository outboxEventRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -25,11 +27,11 @@ public class OutboxPublisher {
     @Transactional
     @Scheduled(fixedDelay = 3000)
     public void publish() {
-        List<OutboxEvent> events = outboxEventRepository.findTop100ByStatusOrderByCreatedAt(OutboxEventStatus.NEW);
+        List<OutboxEvent> events = outboxEventRepository.lockBatchForProcessing(OutboxEventStatus.NEW);
         kafkaTemplate.executeInTransaction(kt -> {
             for (OutboxEvent event : events) {
-                kafkaTemplate.send(USER_PROFILE_EVENTS, event.getPayload());
-                log.info("Send to Kafka in transaction event payload: {}", event.getPayload());
+                kafkaTemplate.send(topic, event.getMessageKey(), event.getPayload());
+                log.info("Send to Kafka in transaction key={}, payload={}", event.getMessageKey(), event.getPayload());
                 event.setStatus(OutboxEventStatus.SENT);
             }
             return true;

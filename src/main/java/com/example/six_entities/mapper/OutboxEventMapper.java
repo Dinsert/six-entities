@@ -14,6 +14,7 @@ import java.util.UUID;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {Instant.class, OutboxEventStatus.class, UUID.class})
 public interface OutboxEventMapper {
 
+    @Mapping(target = "messageKey", expression = "java(event.getUserId().toString())")
     @Mapping(target = "payload", source = "event", qualifiedByName = "convertObjectToJson")
     @Mapping(target = "status", expression = "java(OutboxEventStatus.NEW)")
     @Mapping(target = "createdAt", expression = "java(Instant.now())")

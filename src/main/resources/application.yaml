@@ -56,3 +56,6 @@ springdoc:
 
 cache:
   ttl: 1h
+
+topic:
+  name: user-profile-events
