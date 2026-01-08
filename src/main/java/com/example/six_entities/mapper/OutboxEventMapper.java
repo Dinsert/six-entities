@@ -1,5 +1,6 @@
 package com.example.six_entities.mapper;
 
+import com.example.six_entities.exception.ConvertingException;
 import com.example.six_entities.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +33,7 @@ public interface OutboxEventMapper {
         try {
             return objectMapper.writeValueAsString(event);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting UserProfileEvent to JSON", e);
+            throw new ConvertingException("Error converting UserProfileEvent to JSON", e);
         }
     }
 

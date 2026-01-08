@@ -28,13 +28,17 @@ public class OutboxPublisher {
     @Scheduled(fixedDelay = 3000)
     public void publish() {
         List<OutboxEvent> events = outboxEventRepository.lockBatchForProcessing(OutboxEventStatus.NEW);
-        kafkaTemplate.executeInTransaction(kt -> {
-            for (OutboxEvent event : events) {
-                kafkaTemplate.send(topic, event.getMessageKey(), event.getPayload());
-                log.info("Send to Kafka in transaction key={}, payload={}", event.getMessageKey(), event.getPayload());
-                event.setStatus(OutboxEventStatus.SENT);
-            }
-            return true;
-        });
+        for (OutboxEvent event : events) {
+            kafkaTemplate.send(topic, event.getMessageKey(), event.getPayload())
+                    .whenComplete((result, ex) -> {
+                        if (ex != null) {
+                            log.error("Failed to send event {} to Kafka", event.getId(), ex);
+                        } else {
+                            log.info("Successfully sent event {} to Kafka, offset={}", event.getId(), result.getRecordMetadata().offset());
+                            outboxEventRepository.markStatus(event.getId(), OutboxEventStatus.SENT);
+                        }
+                    });
+            log.info("Send to Kafka in transaction key={}, payload={}", event.getMessageKey(), event.getPayload());
+        }
     }
 }
