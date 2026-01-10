@@ -447,7 +447,7 @@ components:
       properties:
         id:
           type: integer
-          format: int64
+          format: int32
         filename:
           type: string
         s3Key:

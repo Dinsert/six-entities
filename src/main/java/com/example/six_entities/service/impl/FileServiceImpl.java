@@ -109,15 +109,12 @@ public class FileServiceImpl implements FileService {
             return dto;
 
         } catch (URISyntaxException e) {
-            // это баг окружения или SDK — клиент тут ни при чём
             throw new StorageException("Invalid presigned URL returned by S3", e);
 
         } catch (S3Exception e) {
             throw new StorageException("Failed to generate presigned URL: " + awsMessage(e), e);
         }
     }
-
-    // ====== mapping (перенесли из FileMapper в сервис) ======
 
     private FileDto toFileDto(File file) {
         FileDto dto = new FileDto();
@@ -134,15 +131,12 @@ public class FileServiceImpl implements FileService {
         return instant == null ? null : instant.atOffset(ZoneOffset.UTC);
     }
 
-    // ====== bucket helpers ======
-
     private void ensureBucketExists(String bucket) {
         try {
             s3.headBucket(HeadBucketRequest.builder().bucket(bucket).build());
         } catch (NoSuchBucketException e) {
             createBucket(bucket);
         } catch (S3Exception e) {
-            // иногда MinIO отдаёт 404 как общий S3Exception
             if (e.statusCode() == 404) {
                 createBucket(bucket);
                 return;

@@ -56,7 +56,7 @@ create TABLE IF NOT EXISTS app.outbox_events (
 );
 
 create TABLE IF NOT EXISTS app.files (
-    id UUID SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     filename TEXT NOT NULL,
     s3_key TEXT NOT NULL UNIQUE,
     content_type TEXT,

@@ -46,7 +46,6 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation "software.amazon.awssdk:s3"
-    implementation "software.amazon.awssdk:s3-presigner"
     implementation "software.amazon.awssdk:apache-client"
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
