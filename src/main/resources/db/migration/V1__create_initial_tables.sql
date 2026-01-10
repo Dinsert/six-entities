@@ -1,18 +1,18 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+create EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE SCHEMA IF NOT EXISTS app;
+create SCHEMA IF NOT EXISTS app;
 
-CREATE TABLE IF NOT EXISTS app.users (
+create TABLE IF NOT EXISTS app.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS app.coupons (
+create TABLE IF NOT EXISTS app.coupons (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     discount NUMERIC(10, 2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS app.user_coupons (
+create TABLE IF NOT EXISTS app.user_coupons (
     user_id UUID NOT NULL,
     coupon_id UUID NOT NULL,
     PRIMARY KEY (user_id, coupon_id),
@@ -20,29 +20,37 @@ CREATE TABLE IF NOT EXISTS app.user_coupons (
     FOREIGN KEY (coupon_id) REFERENCES app.coupons(id)
 );
 
-CREATE TABLE IF NOT EXISTS app.profiles (
+create TABLE IF NOT EXISTS app.profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     login TEXT NOT NULL,
     password TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS app.players (
+create TABLE IF NOT EXISTS app.players (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     profile_id UUID NOT NULL,
-    FOREIGN KEY (profile_id) REFERENCES app.profiles(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES app.profiles(id) ON delete CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS app.readers (
+create TABLE IF NOT EXISTS app.readers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS app.books (
+create TABLE IF NOT EXISTS app.books (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     author TEXT NOT NULL,
     reader_id UUID NOT NULL,
-    FOREIGN KEY (reader_id) REFERENCES app.readers(id) ON DELETE CASCADE
+    FOREIGN KEY (reader_id) REFERENCES app.readers(id) ON delete CASCADE
+);
+
+create TABLE IF NOT EXISTS app.outbox_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    message_key TEXT NOT NULL,
+    payload JSONB NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL
 );

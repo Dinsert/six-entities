@@ -21,6 +21,11 @@ public class GlobalExceptionHandler {
         return createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
     }
 
+    @ExceptionHandler(ConvertingException.class)
+    public ResponseEntity<ErrorResponseDTO> handleConverting(ConvertingException e, HttpServletRequest request) {
+        return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
         FieldError fieldError = e.getBindingResult().getFieldError();

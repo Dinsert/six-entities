@@ -2,10 +2,10 @@ package com.example.six_entities.service.impl;
 
 import com.example.six_entities.exception.ObjectNotFoundException;
 import com.example.six_entities.mapper.CouponMapper;
+import com.example.six_entities.mapper.OutboxEventMapper;
 import com.example.six_entities.mapper.UserMapper;
-import com.example.six_entities.model.User;
-import com.example.six_entities.model.UserDto;
-import com.example.six_entities.model.UserProfileDto;
+import com.example.six_entities.model.*;
+import com.example.six_entities.repository.OutboxEventRepository;
 import com.example.six_entities.repository.UserRepository;
 import com.example.six_entities.service.UserProfileService;
 import com.example.six_entities.service.UserService;
@@ -28,13 +28,16 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final CouponMapper couponMapper;
     private final UserProfileService userProfileService;
+    private final OutboxEventRepository outboxRepository;
+    private final OutboxEventMapper outboxEventMapper;
 
     @CachePut(value = "users", key = "#result.id")
     @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userRepository.save(userMapper.toEntity(userDto));
-        userProfileService.createProfile(user.getId(), userDto.getUserProfileDto());
+        UserProfileEvent event = outboxEventMapper.toUserProfileEvent(user, userDto, UserProfileEventType.CREATED);
+        outboxRepository.save(outboxEventMapper.toEntity(event));
         UserDto dto = userMapper.toDto(user);
         userMapper.updateDtoFromProfile(userDto.getUserProfileDto(), dto);
         return dto;
@@ -74,7 +77,9 @@ public class UserServiceImpl implements UserService {
         userDto.getCoupons()
                 .forEach(couponDto -> user.getCoupons().stream().filter(coupon -> coupon.getId().equals(couponDto.getId()))
                         .forEach(coupon -> couponMapper.updateEntityFromDto(couponDto, coupon)));
-        userProfileService.updateProfile(user.getId(), userDto.getUserProfileDto());
+
+        UserProfileEvent event = outboxEventMapper.toUserProfileEvent(user, userDto, UserProfileEventType.UPDATED);
+        outboxRepository.save(outboxEventMapper.toEntity(event));
         return userDto;
     }
 }
