@@ -47,6 +47,15 @@ resilience4j:
         retry-exceptions:
           - feign.FeignException
 
+storage:
+  s3:
+    endpoint: http://localhost:9000
+    region: us-east-1
+    access-key: minio
+    secret-key: minio123
+    bucket: files
+    presign-ttl: 10m
+
 springdoc:
   api-docs:
     enabled: true

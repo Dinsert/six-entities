@@ -54,3 +54,12 @@ create TABLE IF NOT EXISTS app.outbox_events (
     status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
+
+create TABLE IF NOT EXISTS app.files (
+    id UUID SERIAL PRIMARY KEY,
+    filename TEXT NOT NULL,
+    s3_key TEXT NOT NULL UNIQUE,
+    content_type TEXT,
+    size BIGINT,
+    created_at TIMESTAMP DEFAULT now()
+);

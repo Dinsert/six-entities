@@ -10,6 +10,7 @@ tags:
   - name: User
   - name: Player
   - name: Reader
+  - name: File
 
 paths:
 
@@ -229,6 +230,62 @@ paths:
         '204':
           description: Deleted
 
+  /files:
+    post:
+      tags: [ File ]
+      operationId: uploadFile
+      summary: Upload file to S3 and save s3_key in Postgres
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [ file ]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDto'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  /files/{id}/download-url:
+    get:
+      tags: [ File ]
+      operationId: getFileDownloadUrl
+      summary: Get presigned download URL by file id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresignedUrlDto'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
 components:
   schemas:
 
@@ -383,3 +440,41 @@ components:
         - NEW
         - SENT
         - ERROR
+
+    FileDto:
+      type: object
+      required: [ id, filename, s3Key, createdAt ]
+      properties:
+        id:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        s3Key:
+          type: string
+          description: Unique S3 object key
+        contentType:
+          type: string
+          nullable: true
+        size:
+          type: integer
+          format: int64
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    PresignedUrlDto:
+      type: object
+      required: [ id, url, expiresInSeconds ]
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+          format: uri
+        expiresInSeconds:
+          type: integer
+          format: int64
+          description: TTL for the presigned URL in seconds

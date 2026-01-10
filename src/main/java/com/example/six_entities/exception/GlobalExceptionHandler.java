@@ -26,6 +26,24 @@ public class GlobalExceptionHandler {
         return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
     }
 
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileNotFound(FileNotFoundException e, HttpServletRequest request) {
+        log.warn("File not found: {}", e.getMessage());
+        return createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileUpload(FileUploadException e, HttpServletRequest request) {
+        log.warn("File upload bad request: {}", e.getMessage());
+        return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<ErrorResponseDTO> handleStorage(StorageException e, HttpServletRequest request) {
+        log.error("Storage error: {}", e.getMessage(), e);
+        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), request.getRequestURI());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
         FieldError fieldError = e.getBindingResult().getFieldError();
