@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public interface OutboxEventRepository extends JpaRepository<OutboxEvent, UUID> 
     List<OutboxEvent> lockBatchForProcessing(OutboxEventStatus status);
 
     @Modifying
+    @Transactional
     @Query("UPDATE OutboxEvent e SET e.status=:status WHERE e.id = :id")
     void markStatus(@Param("id") UUID id, @Param("status") OutboxEventStatus status);
 }

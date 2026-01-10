@@ -28,7 +28,6 @@ spring:
     bootstrap-servers: localhost:9092
     producer:
       acks: all
-      transaction-id-prefix: six-entities-outbox-
       properties:
         enable.idempotence: true
 

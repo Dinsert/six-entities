@@ -33,9 +33,14 @@ public class OutboxPublisher {
                     .whenComplete((result, ex) -> {
                         if (ex != null) {
                             log.error("Failed to send event {} to Kafka", event.getId(), ex);
-                        } else {
+                            return;
+                        }
+
+                        try {
                             log.info("Successfully sent event {} to Kafka, offset={}", event.getId(), result.getRecordMetadata().offset());
                             outboxEventRepository.markStatus(event.getId(), OutboxEventStatus.SENT);
+                        } catch (Exception dbEx) {
+                            log.error("Kafka sent OK, but DB update failed for event {}", event.getId(), dbEx);
                         }
                     });
             log.info("Send to Kafka in transaction key={}, payload={}", event.getMessageKey(), event.getPayload());
