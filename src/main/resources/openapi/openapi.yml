@@ -473,7 +473,6 @@ components:
           format: int64
         url:
           type: string
-          format: uri
         expiresInSeconds:
           type: integer
           format: int64

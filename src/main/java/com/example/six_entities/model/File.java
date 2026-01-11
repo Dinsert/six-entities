@@ -25,5 +25,5 @@ public class File {
 
     private Long size;
 
-    private Instant createdAt = Instant.now();
+    private Instant createdAt;
 }

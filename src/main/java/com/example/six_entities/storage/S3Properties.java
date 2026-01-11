@@ -15,5 +15,5 @@ public class S3Properties {
     private String accessKey;
     private String secretKey;
     private String bucket;
-    private Duration presignTtl = Duration.ofMinutes(10);
+    private Duration presignTtl;
 }

@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.time.OffsetDateTime;
 
@@ -63,5 +64,11 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponseDTO> createErrorResponse(HttpStatus status, String message, String path) {
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(OffsetDateTime.now(), status.value(), message, path);
         return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    private String awsMessage(S3Exception e) {
+        if (e.awsErrorDetails() == null) return e.getMessage();
+        String msg = e.awsErrorDetails().errorMessage();
+        return (msg == null || msg.isBlank()) ? e.getMessage() : msg;
     }
 }

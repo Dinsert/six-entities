@@ -17,8 +17,7 @@ public class FileController implements FileApi {
 
     @Override
     public ResponseEntity<FileDto> uploadFile(MultipartFile file) {
-        FileDto dto = fileService.upload(file);
-        return ResponseEntity.status(201).body(dto);
+        return ResponseEntity.status(201).body(fileService.upload(file));
     }
 
     @Override
