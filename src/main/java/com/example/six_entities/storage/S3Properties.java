@@ -3,6 +3,7 @@ package com.example.six_entities.storage;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.unit.DataSize;
 
 import java.time.Duration;
 
@@ -16,4 +17,5 @@ public class S3Properties {
     private String secretKey;
     private String bucket;
     private Duration presignTtl;
+    private DataSize maxFileSize;
 }

@@ -20,5 +20,5 @@ public interface FileMapper {
     @Mapping(target = "createdAt", expression = "java(Instant.now())")
     File toEntity(String filename, String s3Key, String contentType, long size);
 
-    PresignedUrlDto toPresignedUrlDto(Long id, String url, Long expiresInSeconds);
+    PresignedUrlDto toPresignedUrlDto(Integer id, String url, Long expiresInSeconds);
 }

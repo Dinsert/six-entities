@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileService {
     FileDto upload(MultipartFile file);
 
-    PresignedUrlDto getDownloadUrl(Long fileId);
+    PresignedUrlDto getDownloadUrl(Integer fileId);
 }

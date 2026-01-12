@@ -43,7 +43,7 @@ public class OutboxPublisher {
                             log.error("Kafka sent OK, but DB update failed for event {}", event.getId(), dbEx);
                         }
                     });
-            log.info("Send to Kafka in transaction key={}, payload={}", event.getMessageKey(), event.getPayload());
+            log.info("Send to Kafka key={}, payload={}", event.getMessageKey(), event.getPayload());
         }
     }
 }

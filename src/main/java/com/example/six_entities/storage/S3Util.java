@@ -2,6 +2,7 @@ package com.example.six_entities.storage;
 
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
+
 public class S3Util {
 
     public static String awsMessage(S3Exception e) {
