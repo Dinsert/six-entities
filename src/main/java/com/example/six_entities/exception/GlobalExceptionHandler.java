@@ -23,7 +23,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConvertingException.class)
     public ResponseEntity<ErrorResponseDTO> handleConverting(ConvertingException e, HttpServletRequest request) {
+        log.warn("Error converting: {}", e.getMessage());
         return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileNotFound(FileNotFoundException e, HttpServletRequest request) {
+        return createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ErrorResponseDTO> handleFileUpload(FileUploadException e, HttpServletRequest request) {
+        return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<ErrorResponseDTO> handleStorage(StorageException e, HttpServletRequest request) {
+        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
